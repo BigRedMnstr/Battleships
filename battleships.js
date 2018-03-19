@@ -37,10 +37,15 @@ var model = {
         for (var i = 0; i < this.numShips; i++) {
             var ship = this.ships[i];
             var index = ship.locations.indexOf(guess);
-            if (index >= 0) {
+            
+            if (ship.hits[index] === "hit") {
+                view.displayMessage("You already hit this field!");
+                return true;
+            } else if (index >= 0) {
                 ship.hits[index] = "hit";
                 view.displayHit(guess);
                 view.displayMessage("STRUCK!");
+                
                 if (this.isSunk(ship)) {
                     view.displayMessage("You sinked the ship!");
                     this.shipsSunk++;
@@ -52,13 +57,14 @@ var model = {
         view.displayMessage("You missed");
         return false;
     },
+    
     isSunk: function (ship) {
         for (var i = 0; i < this.shipLength; i++) {
             if (ship.hits[i] !== "hit") {
                 return false;
             }
-            return true;
         }
+        return true;
     }
 };
 
